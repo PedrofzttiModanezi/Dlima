@@ -1035,11 +1035,21 @@
       '        <img class="product-modal__image" alt="" src="" width="600" height="750" />' +
       '      </div>' +
       '      <div class="product-modal__content">' +
+      '        <div class="product-modal__badge">NOVO</div>' +
       '        <h2 id="product-modal-title" class="product-modal__title"></h2>' +
       '        <p class="product-modal__model"></p>' +
       '        <p class="product-modal__desc"></p>' +
       '        <p class="product-modal__price"></p>' +
-      '        <div class="product-modal__sizes" aria-label="Escolha o tamanho"></div>' +
+      '        <p class="product-modal__stock">Restam apenas 2 unidades!</p>' +
+      '        <div class="product-modal__sizes">' +
+'          <p class="product-modal__label">Tamanho</p>' +
+'          <div class="product-modal__size-options">' +
+'            <button class="size-btn active">P</button>' +
+'            <button class="size-btn">M</button>' +
+'            <button class="size-btn">G</button>' +
+'            <button class="size-btn">GG</button>' +
+'          </div>' +
+'        </div>' +
       '        <div class="product-modal__actions">' +
       '          <div class="product-modal__qty">' +
       '            <button type="button" class="product-modal__qty-btn" data-action="dec">−</button>' +
@@ -1578,3 +1588,90 @@ botoesCategoria.forEach(botao => {
     });
 });
 
+/* =========================
+   ZOOM DA IMAGEM DO MODAL
+========================= */
+
+const zoomContainer = document.getElementById("image-zoom");
+const zoomImage = document.getElementById("image-zoom-img");
+const zoomClose = document.getElementById("image-zoom-close");
+
+function openImageZoom(src) {
+  zoomImage.src = src;
+  zoomContainer.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+
+function closeImageZoom() {
+  zoomContainer.hidden = true;
+  document.body.style.overflow = "";
+}
+
+zoomClose.addEventListener("click", closeImageZoom);
+
+zoomContainer.addEventListener("click", function (event) {
+  if (
+    event.target.classList.contains("image-zoom__backdrop") ||
+    event.target === zoomContainer
+  ) {
+    closeImageZoom();
+  }
+});
+
+/* adiciona clique nas imagens do modal */
+setTimeout(() => {
+  document.addEventListener("click", function (event) {
+    const image = event.target.closest(".product-modal__image");
+
+    if (!image) return;
+
+    openImageZoom(image.src);
+  });
+}, 500);
+
+/* =========================
+   SCROLL REVEAL
+========================= */
+
+const revealElements = document.querySelectorAll(
+  ".reveal, .reveal-stagger"
+);
+
+function revealOnScroll() {
+  const triggerBottom =
+    window.innerHeight * 0.88;
+
+  revealElements.forEach((element, index) => {
+    const rect =
+      element.getBoundingClientRect();
+
+    if (rect.top < triggerBottom) {
+      setTimeout(() => {
+        element.classList.add("active");
+      }, index * 120);
+    }
+  });
+}
+
+window.addEventListener(
+  "scroll",
+  revealOnScroll
+);
+
+window.addEventListener(
+  "load",
+  revealOnScroll
+);
+
+/* =========================
+   LOADING SCREEN
+========================= */
+
+window.addEventListener("load", function () {
+  const loader =
+    document.getElementById("loader");
+
+  setTimeout(() => {
+    loader.classList.add("hidden");
+  }, 1800);
+});
