@@ -351,7 +351,7 @@ img {
   margin: 0 0 1rem;
 }
 
-about__list {
+.about__list {
   list-style: none;
   padding: 0;
   margin: 1.5rem auto;
@@ -1155,7 +1155,8 @@ about__list {
 }
 
 /* MOSTRAR AO PASSAR O MOUSE */
-.nav__item-dropdown:hover .products-menu {
+.nav__item-dropdown:hover .products-menu,
+.products-menu.active {
   display: flex;
 }
 
@@ -1323,8 +1324,7 @@ about__list {
   margin-top: 2rem;
 }
 
-/* =========================
-   HERO PREMIUM
+/* =========================HERO PREMIUM
 ========================= */
 
 .hero {
@@ -1450,7 +1450,7 @@ about__list {
 }
 
 /* =========================
-   ANNOUNCEMENT BAR
+ANNOUNCEMENT BAR
 ========================= */
 
 .announcement-bar {
@@ -1513,8 +1513,7 @@ about__list {
   }
 }
 
-/* =========================
-   SCROLL REVEAL
+/* =========================SCROLL REVEAL
 ========================= */
 
 .reveal {
@@ -1555,8 +1554,7 @@ about__list {
     translateY(0);
 }
 
-/* =========================
-   LOADING SCREEN
+/* =========================LOADING SCREEN
 ========================= */
 
 .loader {
