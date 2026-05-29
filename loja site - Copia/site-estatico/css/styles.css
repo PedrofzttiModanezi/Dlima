@@ -1658,3 +1658,9 @@ ANNOUNCEMENT BAR
     opacity: 0.4;
   }
 }
+
+.load-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}

@@ -1230,60 +1230,100 @@
     cart = [];
     persist();
   }
-
+  var visibleNatureProducts = 8;
   function renderProducts() {
-    elGridNature.innerHTML = "";
-    elGridWinter.innerHTML = "";
-    elGridCalcas.innerHTML = "";
-    elGridBones.innerHTML = "";
-    elGridBermudas.innerHTML = "";
-    for (var i = 0; i < PRODUCTS.length; i++) {
-      var p = PRODUCTS[i];
-      var li = document.createElement("li");
-      li.innerHTML =
-        '<article class="card" data-product-id="' + escapeAttr(p.id) + '">' +
-        '<div class="card__media">' +
-        '<div class="card__image-swap">' +
-        '<img class="card__image card__image--front" src="' +
-        escapeAttr(p.imageUrl) +
-        '" alt="' +
-        escapeAttr(p.name) +
-        ' frente" loading="lazy" width="600" height="750" />' +
-        '<img class="card__image card__image--back" src="' +
-        escapeAttr(p.backImageUrl || p.imageUrl) +
-        '" alt="' +
-        escapeAttr(p.name) +
-        ' costa" loading="lazy" width="600" height="750" />' +
-        '</div>' +
-        "</div>" +
-        '<div class="card__body">' +
-        '<h2 class="card__title">' +
-        escapeHtml(p.name) +
-        "</h2>" +
-        '<p class="card__model">' +
-        escapeHtml(p.model) +
-        "</p>" +
-        '<p class="card__desc">' +
-        escapeHtml(p.description) +
-        "</p>" +
-        '<div class="card__footer">' +
-        '<span class="card__price">' +
-        formatBRL(p.priceCents) +
-        "</span>" +
-        '<button type="button" class="btn btn--primary btn-add" data-id="' +
-        escapeAttr(p.id) +
-        '">Adicionar ao carrinho</button>' +
-        "</div>" +
-        "</div>" +
-        "</article>";
-      var targetGrid = elGridNature;
-      if (p.collection === "winter-tide") targetGrid = elGridWinter;
-      else if (p.collection === "calcas") targetGrid = elGridCalcas;
-      else if (p.collection === "bones") targetGrid = elGridBones;
-      else if (p.collection === "bermudas") targetGrid = elGridBermudas;
-      targetGrid.appendChild(li);
+  elGridNature.innerHTML = "";
+  elGridWinter.innerHTML = "";
+  elGridCalcas.innerHTML = "";
+  elGridBones.innerHTML = "";
+  elGridBermudas.innerHTML = "";
+
+  var natureCount = 0;
+
+  for (var i = 0; i < PRODUCTS.length; i++) {
+    var p = PRODUCTS[i];
+
+    // LIMITA APENAS A PRIMEIRA COLEÇÃO
+    if (p.collection === "nature-over") {
+      if (natureCount >= visibleNatureProducts) {
+        continue;
+      }
+
+      natureCount++;
+    }
+
+    var li = document.createElement("li");
+
+    li.innerHTML =
+      '<article class="card" data-product-id="' + escapeAttr(p.id) + '">' +
+      '<div class="card__media">' +
+      '<div class="card__image-swap">' +
+      '<img class="card__image card__image--front" src="' +
+      escapeAttr(p.imageUrl) +
+      '" alt="' +
+      escapeAttr(p.name) +
+      ' frente" loading="lazy" width="600" height="750" />' +
+      '<img class="card__image card__image--back" src="' +
+      escapeAttr(p.backImageUrl || p.imageUrl) +
+      '" alt="' +
+      escapeAttr(p.name) +
+      ' costa" loading="lazy" width="600" height="750" />' +
+      '</div>' +
+      "</div>" +
+      '<div class="card__body">' +
+      '<h2 class="card__title">' +
+      escapeHtml(p.name) +
+      "</h2>" +
+      '<p class="card__model">' +
+      escapeHtml(p.model) +
+      "</p>" +
+      '<p class="card__desc">' +
+      escapeHtml(p.description) +
+      "</p>" +
+      '<div class="card__footer">' +
+      '<span class="card__price">' +
+      formatBRL(p.priceCents) +
+      "</span>" +
+      '<button type="button" class="btn btn--primary btn-add" data-id="' +
+      escapeAttr(p.id) +
+      '">Adicionar ao carrinho</button>' +
+      "</div>" +
+      "</div>" +
+      "</article>";
+
+    var targetGrid = elGridNature;
+
+    if (p.collection === "winter-tide") {
+      targetGrid = elGridWinter;
+    }
+    else if (p.collection === "calcas") {
+      targetGrid = elGridCalcas;
+    }
+    else if (p.collection === "bones") {
+      targetGrid = elGridBones;
+    }
+    else if (p.collection === "bermudas") {
+      targetGrid = elGridBermudas;
+    }
+
+    targetGrid.appendChild(li);
+  }
+
+  // CONTROLA O BOTÃO
+  var btn = document.getElementById("load-more-btn");
+
+  if (btn) {
+    var totalNature = PRODUCTS.filter(function(p) {
+      return p.collection === "nature-over";
+    }).length;
+
+    if (visibleNatureProducts >= totalNature) {
+      btn.style.display = "none";
+    } else {
+      btn.style.display = "flex";
     }
   }
+}
 
   function escapeHtml(s) {
     var div = document.createElement("div");
@@ -1545,7 +1585,12 @@
       if (elProductModal && !elProductModal.hidden) closeProductModal();
     }
   });
-
+  document.addEventListener("click", function(e) {
+  if (e.target && e.target.id === "load-more-btn") {
+    visibleNatureProducts += 8;
+    renderProducts();
+  }
+});   
   createProductModal();
   renderProducts();
   persist();
